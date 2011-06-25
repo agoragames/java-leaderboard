@@ -138,5 +138,5 @@ public class Leaderboard {
 		data.put("rank", rankForIn(_leaderboardName, member, useZeroIndexForRank));
 		
 		return data;
-	}
+	}	
 }
