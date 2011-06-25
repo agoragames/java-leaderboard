@@ -1,5 +1,7 @@
 package com.agoragames.leaderboard;
 
+import java.util.Hashtable;
+
 import redis.clients.jedis.Jedis;
 
 public class Leaderboard {
@@ -63,6 +65,14 @@ public class Leaderboard {
 		
 		return (int) Math.ceil((float) totalMembersIn(_leaderboardName) / (float) pageSize);		
 	}
+	
+	public long totalMembersInScoreRange(double minScore, double maxScore) {
+		return totalMembersInScoreRangeIn(_leaderboardName, minScore, maxScore);
+	}
+	
+	public long totalMembersInScoreRangeIn(String leaderboardName, double minScore, double maxScore) {
+		return _jedis.zcount(leaderboardName, minScore, maxScore);
+	}
 
 	public long addMember(String member, double score) {
 		return this.addMemberTo(_leaderboardName, member, score);
@@ -72,5 +82,61 @@ public class Leaderboard {
 		return _jedis.zadd(leaderboardName, score, member);
 	}
 	
+	public double scoreFor(String member) {
+		return scoreForIn(_leaderboardName, member);
+	}
 	
+	public double scoreForIn(String leaderboardName, String member) {
+		return _jedis.zscore(leaderboardName, member);
+	}
+	
+	public double changeScoreFor(String member, double delta) {
+		return changeScoreForMemberIn(_leaderboardName, member, delta);
+	}
+	
+	public double changeScoreForMemberIn(String leaderboardName, String member, double delta) {
+		return _jedis.zincrby(_leaderboardName, delta, member); 
+	}
+	
+	public boolean checkMember(String member) {
+		return checkMemberIn(_leaderboardName, member);
+	}
+	
+	public boolean checkMemberIn(String leaderboardName, String member) {
+		return !(_jedis.zscore(leaderboardName, member) == null);
+	}
+	
+	public long rankFor(String member, boolean useZeroIndexForRank) {
+		return rankForIn(_leaderboardName, member, useZeroIndexForRank);
+	}
+	
+	public long rankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
+		if (useZeroIndexForRank) {
+			return _jedis.zrevrank(leaderboardName, member);
+		} else {
+			return (_jedis.zrevrank(leaderboardName, member) + 1);
+		}		
+	}
+	
+	public long removeMembersInScoreRange(double minScore, double maxScore) {
+		return removeMembersInScoreRangeIn(_leaderboardName, minScore, maxScore);
+	}
+	
+	public long removeMembersInScoreRangeIn(String leaderboardName, double minScore, double maxScore) {
+		return _jedis.zremrangeByScore(leaderboardName, minScore, maxScore);
+	}
+	
+	public Hashtable<String, Object> scoreAndRankFor(String member, boolean useZeroIndexForRank) {
+		return scoreAndRankForIn(_leaderboardName, member, useZeroIndexForRank);
+	}
+	
+	public Hashtable<String, Object> scoreAndRankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
+		Hashtable<String, Object> data = new Hashtable<String, Object>();
+		
+		data.put("member", member);
+		data.put("score", scoreForIn(_leaderboardName, member));
+		data.put("rank", rankForIn(_leaderboardName, member, useZeroIndexForRank));
+		
+		return data;
+	}
 }
