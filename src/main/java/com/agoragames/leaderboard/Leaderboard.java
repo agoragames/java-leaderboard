@@ -153,20 +153,22 @@ public class Leaderboard {
 	}
 
 	/**
+	 * Add a member to the current leaderboard
 	 * 
-	 * @param member
-	 * @param score
-	 * @return
+	 * @param member Member
+	 * @param score Score
+	 * @return 
 	 */
 	public long addMember(String member, double score) {
 		return this.addMemberTo(_leaderboardName, member, score);
 	}
 
 	/**
+	 * Add a member to the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @param score
+	 * @param leaderboardName Leaderboard
+	 * @param member Member 
+	 * @param score Score
 	 * @return
 	 */
 	public long addMemberTo(String leaderboardName, String member, double score) {
@@ -174,80 +176,88 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Retrieve the score for a member in the current leaderboard
 	 * 
-	 * @param member
-	 * @return
+	 * @param member Member 
+	 * @return Member score
 	 */
 	public double scoreFor(String member) {
 		return scoreForIn(_leaderboardName, member);
 	}
 	
 	/**
+	 * Retrieve the score for a member in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @return Member score
 	 */
 	public double scoreForIn(String leaderboardName, String member) {
 		return _jedis.zscore(leaderboardName, member);
 	}
 	
 	/**
+	 * Change the score for a member by a certain delta in the current leaderboard
 	 * 
-	 * @param member
-	 * @param delta
-	 * @return
+	 * @param member Member
+	 * @param delta Score delta
+	 * @return Updated score
 	 */
 	public double changeScoreFor(String member, double delta) {
 		return changeScoreForMemberIn(_leaderboardName, member, delta);
 	}
 	
 	/**
+	 * Change the score for a member by a certain delta in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @param delta
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @param delta Score delta
+	 * @return Updated score
 	 */
 	public double changeScoreForMemberIn(String leaderboardName, String member, double delta) {
 		return _jedis.zincrby(_leaderboardName, delta, member); 
 	}
 	
 	/**
+	 * Check to see if member is in the current leaderboard
 	 * 
-	 * @param member
-	 * @return
+	 * @param member Member
+	 * @return true if member is in the current leaderboard, false otherwise 
 	 */
 	public boolean checkMember(String member) {
 		return checkMemberIn(_leaderboardName, member);
 	}
 	
 	/**
+	 * Check to see if member is in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @return true if member is in the named leaderboard, false otherwise 
 	 */
 	public boolean checkMemberIn(String leaderboardName, String member) {
 		return !(_jedis.zscore(leaderboardName, member) == null);
 	}
 	
 	/**
+	 * Retrieve the rank for a member in the current leaderboard
 	 * 
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Rank for member in the current leaderboard
 	 */
 	public long rankFor(String member, boolean useZeroIndexForRank) {
 		return rankForIn(_leaderboardName, member, useZeroIndexForRank);
 	}
 	
 	/**
+	 * Retrieve the rank for a member in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Rank for member in the named leaderboard
 	 */
 	public long rankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
 		if (useZeroIndexForRank) {
@@ -258,9 +268,10 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Remove members from the current leaderboard in a given score range
 	 * 
-	 * @param minScore
-	 * @param maxScore
+	 * @param minScore Minimum score
+	 * @param maxScore Maximum score
 	 * @return
 	 */
 	public long removeMembersInScoreRange(double minScore, double maxScore) {
@@ -268,10 +279,11 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Remove members from the named leaderboard in a given score range
 	 * 
-	 * @param leaderboardName
-	 * @param minScore
-	 * @param maxScore
+	 * @param leaderboardName Leaderboard
+	 * @param minScore Minimum score
+	 * @param maxScore Maximum score
 	 * @return
 	 */
 	public long removeMembersInScoreRangeIn(String leaderboardName, double minScore, double maxScore) {
@@ -279,21 +291,23 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Retrieve score and rank for a member in the current leaderboard
 	 * 
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Score and rank for a member in the current leaderboard
 	 */
 	public Hashtable<String, Object> scoreAndRankFor(String member, boolean useZeroIndexForRank) {
 		return scoreAndRankForIn(_leaderboardName, member, useZeroIndexForRank);
 	}
 	
 	/**
+	 * Retrieve score and rank for a member in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Score and rank for a member in the named leaderboard
 	 */
 	public Hashtable<String, Object> scoreAndRankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
 		Hashtable<String, Object> data = new Hashtable<String, Object>();
@@ -306,22 +320,24 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Retrieve a page of leaders as a list of LeaderData in the current leaderboard
 	 * 
-	 * @param currentPage
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param currentPage Page
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Page of leaders as a list of LeaderData in the current leaderboard
 	 */
 	public List<LeaderData> leadersIn(int currentPage, boolean useZeroIndexForRank) {
 		return leadersIn(_leaderboardName, currentPage, useZeroIndexForRank, _pageSize);
 	}
 	
 	/**
+	 * Retrieve a page of leaders as a list of LeaderData in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param currentPage
-	 * @param useZeroIndexForRank
-	 * @param pageSize
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param currentPage Page
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @param pageSize Page size
+	 * @return Page of leaders as a list of LeaderData in the named leaderboard
 	 */
 	public List<LeaderData> leadersIn(String leaderboardName, int currentPage, boolean useZeroIndexForRank, int pageSize) {
 		if (currentPage < 1) {
@@ -348,22 +364,24 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Retrieve leaders around a given member in the current leaderboard as a list of LeaderData
 	 * 
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return Leaders around a given member in the current leaderboard as a list of LeaderData
 	 */
 	public List<LeaderData> aroundMe(String member, boolean useZeroIndexForRank) {
 		return aroundMeIn(_leaderboardName, member, useZeroIndexForRank, _pageSize);
 	}
 	
 	/**
+	 * Retrieve leaders around a given member in the named leaderboard as a list of LeaderData
 	 * 
-	 * @param leaderboardName
-	 * @param member
-	 * @param useZeroIndexForRank
-	 * @param pageSize
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param member Member
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @param pageSize Page size
+	 * @return Leaders around a given member in the named leaderboard as a list of LeaderData
 	 */
 	public List<LeaderData> aroundMeIn(String leaderboardName, String member, boolean useZeroIndexForRank, int pageSize) {
 		long reverseRankForMember = _jedis.zrevrank(leaderboardName, member);
@@ -383,21 +401,23 @@ public class Leaderboard {
 	}
 	
 	/**
+	 * Retrieve a list of LeaderData objects for a list of members in the current leaderboard
 	 * 
-	 * @param members
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param members List of member names
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return List of LeaderData objects for a list of members in the current leaderboard
 	 */
 	public List<LeaderData> rankedInList(List<String> members, boolean useZeroIndexForRank) {
 		return rankedInListIn(_leaderboardName, members, useZeroIndexForRank);
 	}
 	
 	/**
+	 * Retrieve a list of LeaderData objects for a list of members in the named leaderboard
 	 * 
-	 * @param leaderboardName
-	 * @param members
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param members List of member names
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return List of LeaderData objects for a list of members in the named leaderboard
 	 */
 	public List<LeaderData> rankedInListIn(String leaderboardName, List<String> members, boolean useZeroIndexForRank) {
 		List<LeaderData> leaderData = new ArrayList<LeaderData>();
@@ -413,11 +433,12 @@ public class Leaderboard {
 	}
 		
 	/**
+	 * Massage the leaderboard data into LeaderData objects
 	 * 
-	 * @param leaderboardName
-	 * @param memberData
-	 * @param useZeroIndexForRank
-	 * @return
+	 * @param leaderboardName Leaderboard
+	 * @param memberData Tuple of member and score
+	 * @param useZeroIndexForRank Use zero-based index for rank
+	 * @return List of LeaderData objects which contains member, score and rank
 	 */
 	private List<LeaderData> massageLeaderData(String leaderboardName, Set<Tuple> memberData, boolean useZeroIndexForRank) {
 		List<LeaderData> leaderData = new ArrayList<LeaderData>();
