@@ -1,7 +1,11 @@
 package com.agoragames.leaderboard;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import junit.framework.TestCase;
 import redis.clients.jedis.Jedis;
@@ -145,7 +149,45 @@ public class LeaderboardTest extends TestCase {
 		
 		leaders = _leaderboard.leadersIn(_leaderboard.getLeaderboardName(), 1, false, 10);
 		assertEquals(10, leaders.size());
-	}	
+	}
+	
+	public void testAroundMe() {
+		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
+		
+		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1, _leaderboard.totalMembers());
+		
+		List<LeaderData> leadersAroundMe = _leaderboard.aroundMe("member_30", false);
+		assertEquals(_leaderboard.getPageSize() / 2, leadersAroundMe.size() / 2);
+		
+		leadersAroundMe = _leaderboard.aroundMe("member_1", false);
+		assertEquals(_leaderboard.getPageSize() / 2 + 1, leadersAroundMe.size());
+		
+		leadersAroundMe = _leaderboard.aroundMe("member_76", false);
+		assertEquals(_leaderboard.getPageSize() / 2, leadersAroundMe.size() / 2);
+	}
+	
+	public void testRankedInList() {
+		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE);
+		
+		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE, _leaderboard.totalMembers());
+		
+		List<String> members = new ArrayList<String>();
+		members.add("member_1");
+		members.add("member_5");
+		members.add("member_10");
+		
+		List<LeaderData> rankedMembers = _leaderboard.rankedInList(members, false);
+		assertEquals(3, rankedMembers.size());
+		
+		assertEquals(25, rankedMembers.get(0).getRank());
+		assertEquals(1.0, rankedMembers.get(0).getScore());
+	
+		assertEquals(21, rankedMembers.get(1).getRank());
+		assertEquals(5.0, rankedMembers.get(1).getScore());
+
+		assertEquals(16, rankedMembers.get(2).getRank());
+		assertEquals(10.0, rankedMembers.get(2).getScore());
+	}
 	
 	private void addMembersToLeaderboard(int totalMembers) {
 		for (int i = 1; i <= totalMembers; i++) {
