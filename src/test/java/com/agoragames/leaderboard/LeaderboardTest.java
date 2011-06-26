@@ -1,6 +1,7 @@
 package com.agoragames.leaderboard;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import junit.framework.TestCase;
 import redis.clients.jedis.Jedis;
@@ -27,6 +28,10 @@ public class LeaderboardTest extends TestCase {
 
 	public void testVersion() {
 		assertEquals("1.0.0", Leaderboard.VERSION);
+	}
+	
+	public void testGetLeaderboardName() {
+		assertEquals("name", _leaderboard.getLeaderboardName());
 	}
 	
 	public void testSetPageSize() {
@@ -109,6 +114,38 @@ public class LeaderboardTest extends TestCase {
 		assertEquals(1.0, ((Double) data.get("score")).doubleValue());
 		assertEquals(5, ((Long) data.get("rank")).longValue());
 	}
+	
+	public void testLeadersIn() {
+		addMembersToLeaderboard(25);
+		
+		List<LeaderData> leaders = _leaderboard.leadersIn(1, false);
+		assertEquals(25, leaders.size());
+		assertEquals("member_25", leaders.get(0).getMember());
+		assertEquals("member_1", leaders.get(leaders.size() - 1).getMember());
+		assertEquals(1, (int) leaders.get(leaders.size() - 1).getScore());
+		assertEquals(25, leaders.get(leaders.size() - 1).getRank());
+	}
+	
+	public void testLeadersWithMultiplePages() {
+		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
+		
+		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1, _leaderboard.totalMembers());
+
+		List<LeaderData> leaders = _leaderboard.leadersIn(1, false);
+		assertEquals(_leaderboard.getPageSize(), leaders.size());
+
+		leaders = _leaderboard.leadersIn(2, false);
+		assertEquals(_leaderboard.getPageSize(), leaders.size());
+
+		leaders = _leaderboard.leadersIn(3, false);
+		assertEquals(_leaderboard.getPageSize(), leaders.size());
+
+		leaders = _leaderboard.leadersIn(4, false);
+		assertEquals(1, leaders.size());
+		
+		leaders = _leaderboard.leadersIn(_leaderboard.getLeaderboardName(), 1, false, 10);
+		assertEquals(10, leaders.size());
+	}	
 	
 	private void addMembersToLeaderboard(int totalMembers) {
 		for (int i = 1; i <= totalMembers; i++) {

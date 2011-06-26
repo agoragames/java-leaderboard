@@ -1,8 +1,13 @@
 package com.agoragames.leaderboard;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 
 public class Leaderboard {
 	
@@ -28,6 +33,10 @@ public class Leaderboard {
 		}
 		
 		_jedis = new Jedis(host, port);
+	}
+	
+	public String getLeaderboardName() {
+		return _leaderboardName;		
 	}
 	
 	public int getPageSize() {
@@ -138,5 +147,46 @@ public class Leaderboard {
 		data.put("rank", rankForIn(_leaderboardName, member, useZeroIndexForRank));
 		
 		return data;
-	}	
+	}
+	
+	public List<LeaderData> leadersIn(int currentPage, boolean useZeroIndexForRank) {
+		return leadersIn(_leaderboardName, currentPage, useZeroIndexForRank, _pageSize);
+	}
+	
+	public List<LeaderData> leadersIn(String leaderboardName, int currentPage, boolean useZeroIndexForRank, int pageSize) {
+		if (currentPage < 1) {
+			currentPage = 1;
+		}
+		
+		if (pageSize < 1) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+		
+		if (currentPage > totalPagesIn(leaderboardName, pageSize)) {
+			currentPage = totalPagesIn(leaderboardName, pageSize);
+		}
+		
+		int indexForRedis = currentPage - 1;
+		int startingOffset = indexForRedis * pageSize;
+		if (startingOffset < 0) {
+			startingOffset = 0;
+		}
+		int endingOffset = (startingOffset + pageSize) - 1;
+				
+		Set<Tuple> rawLeaderData = _jedis.zrevrangeWithScores(leaderboardName, startingOffset, endingOffset);
+		return massageLeaderData(leaderboardName, rawLeaderData, useZeroIndexForRank);	
+	}
+	
+	private List<LeaderData> massageLeaderData(String leaderboardName, Set<Tuple> memberData, boolean useZeroIndexForRank) {
+		List<LeaderData> leaderData = new ArrayList<LeaderData>();
+		
+		Iterator<Tuple> memberDataIterator = memberData.iterator();
+		while (memberDataIterator.hasNext()) {
+			Tuple memberDataTuple = memberDataIterator.next();
+			LeaderData leaderDataItem = new LeaderData(memberDataTuple.getElement(), memberDataTuple.getScore(), rankForIn(leaderboardName, memberDataTuple.getElement(), useZeroIndexForRank));
+			leaderData.add(leaderDataItem);
+		}
+		
+		return leaderData;
+	}
 }
