@@ -20,7 +20,7 @@
   </issueManagement>
   <scm>
   	<url>scm:git:git://github.com/agoragames/java-leaderboard.git</url>
-  	<connection>scm:git:git://github.com/agoragames/java-leaderboard.git</connection>
+  	<connection>scm:git:git@github.com/agoragames/java-leaderboard.git</connection>
   </scm>
   
   <dependencies>
