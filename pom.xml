@@ -9,20 +9,14 @@
   <name>leaderboard</name>
   <description>Leaderboards backed by Redis in Java</description>
   <url>https://github.com/agoragames/java-leaderboard</url>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <version>2.0.0</version>
-	  </dependency>
-  </dependencies>
+    
+  <developers>
+    <developer>
+      <id>czarneckid</id>
+      <name>David Czarnecki</name>
+      <email>czarneckid@acm.org</email>
+    </developer>
+  </developers>
 
   <licenses>
     <license>
@@ -46,8 +40,22 @@
   	<connection>scm:git:git://github.com/agoragames/java-leaderboard.git</connection>
   	<developerConnection>scm:git:git@github.com:agoragames/java-leaderboard.git</developerConnection>
   </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.0.0</version>
+	  </dependency>
+  </dependencies>
   
-  <build>
+  <!-- <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -55,9 +63,9 @@
         <version>2.1</version>
       </plugin>
     </plugins>
-  </build>
+  </build> -->
   
-  <distributionManagement>
+  <!-- <distributionManagement>
     <repository>
       <id>staging</id>
       <url>file://${project.build.outputDirectory}/releases/release/${project.version}/</url>
@@ -70,5 +78,5 @@
       <id>site.server</id>
       <url>file://${project.build.outputDirectory}/releases/site/${project.version}/</url>
     </site>
-  </distributionManagement>  
+  </distributionManagement>   -->
 </project>
