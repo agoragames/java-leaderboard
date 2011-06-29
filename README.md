@@ -1,10 +1,12 @@
-= leaderboard
+leaderboard
+===========
 
 Leaderboards backed by Redis in Java, http://redis.io.
 
 Builds off ideas proposed in http://blog.agoragames.com/2011/01/01/creating-high-score-tables-leaderboards-using-redis/.
 
-== Installation
+Installation
+============
 
 You should be able to use the following as a dependency in your Maven pom.xml:
 
@@ -17,15 +19,19 @@ You should be able to use the following as a dependency in your Maven pom.xml:
 Make sure your redis server is running! Redis configuration is outside the scope of this README, but 
 check out the Redis documentation, http://redis.io/documentation.
 
-== Compatibility
+Compatibility
+============
 
 The gem has been built and tested under Ruby 1.8.7 and Ruby 1.9.2
 	
-== Usage
+Usage
+============
 
-== Future Ideas
+Future Ideas
+============
   
-== Contributing to leaderboard
+Contributing to leaderboard
+============
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -35,7 +41,8 @@ The gem has been built and tested under Ruby 1.8.7 and Ruby 1.9.2
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the pom.xml, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-== Copyright
+Copyright
+============
 
 Copyright (c) 2011 David Czarnecki. See LICENSE.txt for further details.
 
