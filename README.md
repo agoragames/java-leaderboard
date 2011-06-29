@@ -22,7 +22,11 @@ check out the Redis documentation, http://redis.io/documentation.
 Compatibility
 ============
 
-The gem has been built and tested under Ruby 1.8.7 and Ruby 1.9.2
+The JAR has been built under OS X using the following Java Runtime:
+
+    java version "1.6.0_24"
+    Java(TM) SE Runtime Environment (build 1.6.0_24-b07-334-10M3326)
+    Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02-334, mixed mode)
 	
 Usage
 ============
