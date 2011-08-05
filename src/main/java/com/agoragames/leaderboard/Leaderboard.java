@@ -153,25 +153,25 @@ public class Leaderboard {
 	}
 
 	/**
-	 * Add a member to the current leaderboard
+	 * Rank a member in the current leaderboard
 	 * 
 	 * @param member Member
 	 * @param score Score
 	 * @return 
 	 */
-	public long addMember(String member, double score) {
-		return this.addMemberTo(_leaderboardName, member, score);
+	public long rankMember(String member, double score) {
+		return this.rankMemberIn(_leaderboardName, member, score);
 	}
 
 	/**
-	 * Add a member to the named leaderboard
+	 * Rank a member in the named leaderboard
 	 * 
 	 * @param leaderboardName Leaderboard
 	 * @param member Member 
 	 * @param score Score
 	 * @return
 	 */
-	public long addMemberTo(String leaderboardName, String member, double score) {
+	public long rankMemberIn(String leaderboardName, String member, double score) {
 		return _jedis.zadd(leaderboardName, score, member);
 	}
 	

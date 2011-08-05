@@ -46,31 +46,31 @@ public class LeaderboardTest extends TestCase {
 		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE, _leaderboard.getPageSize());
 	}
 	
-	public void testAddMemberAndTotalMembers() {
-		addMembersToLeaderboard(5);
+	public void testrankMemberAndTotalMembers() {
+		rankMembersInLeaderboard(5);
 		
 		assertEquals(5, _leaderboard.totalMembers());
 	}
 	
 	public void testTotalPages() {
-		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE + 2);
+		rankMembersInLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE + 2);
 		
 		assertEquals(2, _leaderboard.totalPages());
 	}
 	
 	public void testTotalMembersInScoreRange() {
-		addMembersToLeaderboard(5);
+		rankMembersInLeaderboard(5);
 		
 		assertEquals(3, _leaderboard.totalMembersInScoreRange(2, 4));
 	}
 	
 	public void testScoreFor() {
-		_leaderboard.addMember("member", 76);
+		_leaderboard.rankMember("member", 76);
 		assertEquals(76, (int) _leaderboard.scoreFor("member"));
 	}
 	
 	public void testChangeScoreFor() {
-		_leaderboard.addMember("member", 5);
+		_leaderboard.rankMember("member", 5);
 		assertEquals(5, (int) _leaderboard.scoreFor("member"));
 		
 		_leaderboard.changeScoreFor("member", 5);
@@ -81,27 +81,27 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testCheckMember() {
-		addMembersToLeaderboard(5);
+		rankMembersInLeaderboard(5);
 		
 		assertEquals(true, _leaderboard.checkMember("member_1"));
 		assertEquals(false, _leaderboard.checkMember("member_8"));
 	}
 	
 	public void testRankFor() {
-		addMembersToLeaderboard(5);
+		rankMembersInLeaderboard(5);
 		
 		assertEquals(2, _leaderboard.rankFor("member_4", false));
 		assertEquals(1, _leaderboard.rankFor("member_4", true));
 	}
 	
 	public void testRemoveMembersInScoreRange() {
-		addMembersToLeaderboard(5);
+		rankMembersInLeaderboard(5);
 		
 		assertEquals(5, _leaderboard.totalMembers());
 		
-		_leaderboard.addMember("cheater_1", 100);
-		_leaderboard.addMember("cheater_2", 101);
-		_leaderboard.addMember("cheater_3", 102);
+		_leaderboard.rankMember("cheater_1", 100);
+		_leaderboard.rankMember("cheater_2", 101);
+		_leaderboard.rankMember("cheater_3", 102);
 		
 		assertEquals(8, _leaderboard.totalMembers());
 				
@@ -110,7 +110,7 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testScoreAndRankFor() {
-		addMembersToLeaderboard(5);
+		rankMembersInLeaderboard(5);
 		
 		Hashtable<String, Object> data = _leaderboard.scoreAndRankFor("member_1", false);
 		
@@ -120,7 +120,7 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testLeadersIn() {
-		addMembersToLeaderboard(25);
+		rankMembersInLeaderboard(25);
 		
 		List<LeaderData> leaders = _leaderboard.leadersIn(1, false);
 		assertEquals(25, leaders.size());
@@ -131,7 +131,7 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testLeadersWithMultiplePages() {
-		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
+		rankMembersInLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
 		
 		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1, _leaderboard.totalMembers());
 
@@ -152,7 +152,7 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testAroundMe() {
-		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
+		rankMembersInLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1);
 		
 		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE * 3 + 1, _leaderboard.totalMembers());
 		
@@ -167,7 +167,7 @@ public class LeaderboardTest extends TestCase {
 	}
 	
 	public void testRankedInList() {
-		addMembersToLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE);
+		rankMembersInLeaderboard(Leaderboard.DEFAULT_PAGE_SIZE);
 		
 		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE, _leaderboard.totalMembers());
 		
@@ -189,9 +189,9 @@ public class LeaderboardTest extends TestCase {
 		assertEquals(10.0, rankedMembers.get(2).getScore());
 	}
 	
-	private void addMembersToLeaderboard(int totalMembers) {
+	private void rankMembersInLeaderboard(int totalMembers) {
 		for (int i = 1; i <= totalMembers; i++) {
-			_leaderboard.addMember("member_" + i, i);
+			_leaderboard.rankMember("member_" + i, i);
 		}
 	}
 }
