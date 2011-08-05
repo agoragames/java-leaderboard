@@ -8,6 +8,8 @@ import java.util.Set;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
+import redis.clients.jedis.Transaction;
+import redis.clients.jedis.TransactionBlock;
 
 public class Leaderboard {
 	
@@ -341,9 +343,18 @@ public class Leaderboard {
 	public Hashtable<String, Object> scoreAndRankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
 		Hashtable<String, Object> data = new Hashtable<String, Object>();
 		
+		Transaction transaction = _jedis.multi();
+        transaction.zscore(leaderboardName, member);
+        transaction.zrevrank(leaderboardName, member);
+        List<Object> response = transaction.exec();
+            		
 		data.put("member", member);
-		data.put("score", scoreForIn(_leaderboardName, member));
-		data.put("rank", rankForIn(_leaderboardName, member, useZeroIndexForRank));
+		data.put("score", response.get(0));		
+		if (useZeroIndexForRank) {
+		    data.put("rank", response.get(1));
+		} else {
+		    data.put("rank", (Long) response.get(1) + 1);
+		}
 		
 		return data;
 	}
