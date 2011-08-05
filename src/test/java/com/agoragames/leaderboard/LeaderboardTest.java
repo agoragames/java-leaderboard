@@ -38,6 +38,13 @@ public class LeaderboardTest extends TestCase {
 		assertEquals("name", _leaderboard.getLeaderboardName());
 	}
 	
+	public void testDeleteLeaderboard() {
+	    rankMembersInLeaderboard(5);
+	    assertTrue(_jedis.exists("name"));
+	    _leaderboard.deleteLeaderboard();
+	    assertFalse(_jedis.exists("name"));	    
+	}
+	
 	public void testSetPageSize() {
 		_leaderboard.setPageSize(10);		
 		assertEquals(10, _leaderboard.getPageSize());
@@ -46,7 +53,7 @@ public class LeaderboardTest extends TestCase {
 		assertEquals(Leaderboard.DEFAULT_PAGE_SIZE, _leaderboard.getPageSize());
 	}
 	
-	public void testrankMemberAndTotalMembers() {
+	public void testRankMemberAndTotalMembers() {
 		rankMembersInLeaderboard(5);
 		
 		assertEquals(5, _leaderboard.totalMembers());

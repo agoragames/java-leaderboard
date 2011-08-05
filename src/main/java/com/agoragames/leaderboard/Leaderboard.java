@@ -56,7 +56,25 @@ public class Leaderboard {
 	public String getLeaderboardName() {
 		return _leaderboardName;		
 	}
-	
+
+	/**
+	 * Get the page size
+	 * 
+	 * @return Page size
+	 */
+	public long deleteLeaderboard() {
+		return deleteLeaderboardNamed(_leaderboardName);
+	}
+
+	/**
+	 * Get the page size
+	 * 
+	 * @return Page size
+	 */
+	public long deleteLeaderboardNamed(String leaderboardName) {
+		return _jedis.del(leaderboardName);
+	}
+		
 	/**
 	 * Get the page size
 	 * 
