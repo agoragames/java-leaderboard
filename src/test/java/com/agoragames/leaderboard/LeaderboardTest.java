@@ -31,7 +31,7 @@ public class LeaderboardTest extends TestCase {
 	}
 
 	public void testVersion() {
-		assertEquals("1.0.0", Leaderboard.VERSION);
+		assertEquals("2.0.0", Leaderboard.VERSION);
 	}
 	
 	public void testGetLeaderboardName() {
