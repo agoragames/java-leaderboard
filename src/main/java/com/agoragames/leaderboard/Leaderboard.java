@@ -38,14 +38,25 @@ public class Leaderboard {
 	 * @param pageSize Page size
 	 */
 	public Leaderboard(String leaderboardName, String host, int port, int pageSize) {
-		_leaderboardName = leaderboardName;
-		_pageSize = pageSize;
-		
-		if (_pageSize < 1) {
-			_pageSize = DEFAULT_PAGE_SIZE;
-		}
-		
-		_jedis = new Jedis(host, port);
+		this(leaderboardName, pageSize, new Jedis(host, port));
+	}
+	
+	/**
+	 * Create a leaderboard with a given name, page size and existing Redis connection
+	 * 
+	 * @param leaderboardName Name of the leaderboard
+	 * @param pageSize Page size
+	 * @param redisConnection Redis connection
+	 */
+	public Leaderboard(String leaderboardName, int pageSize, Jedis redisConnection) {
+	    _leaderboardName = leaderboardName;
+	    _pageSize = pageSize;
+	    
+	    if (_pageSize < 1) {
+	        _pageSize = DEFAULT_PAGE_SIZE;
+	    }
+	    
+	    _jedis = redisConnection;
 	}
 	
 	/**
