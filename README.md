@@ -31,6 +31,19 @@ The JAR has been built under OS X using the following Java Runtime:
 Usage
 ============
 
+For now, look at the Scala leaderboard documentation, https://github.com/agoragames/scala-leaderboard, or the tests for usage.
+
+Ports
+=====
+
+The following ports have been made of the leaderboard gem.
+
+* NodeJS: https://github.com/omork/node-leaderboard
+* PHP: https://github.com/agoragames/php-leaderboard
+* Python: https://github.com/agoragames/python-leaderboard
+* Ruby: https://github.com/agoragames/leaderboard
+* Scala: https://github.com/agoragames/scala-leaderboard
+
 Future Ideas
 ============
   
