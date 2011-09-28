@@ -15,7 +15,7 @@
   <name>leaderboard</name>
   <description>Leaderboards backed by Redis in Java</description>
   <url>https://github.com/agoragames/java-leaderboard</url>
-    
+  
   <developers>
     <developer>
       <id>czarneckid</id>
@@ -26,25 +26,25 @@
 
   <licenses>
     <license>
-	    <name>MIT License</name>
-	    <url>https://github.com/agoragames/java-leaderboard/blob/master/LICENSE.txt</url>
-	    <distribution>repo</distribution>
-	  </license>
-	</licenses>
+      <name>MIT License</name>
+      <url>https://github.com/agoragames/java-leaderboard/blob/master/LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <issueManagement>
-  	<system>GitHub Issues</system>
-  	<url>https://github.com/agoragames/java-leaderboard/issues</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/agoragames/java-leaderboard/issues</url>
   </issueManagement>
   
   <scm>
-  	<url>https://github.com/agoragames/java-leaderboard</url>
-  	<connection>scm:git:git://github.com/agoragames/java-leaderboard.git</connection>
-  	<developerConnection>scm:git:git@github.com:agoragames/java-leaderboard.git</developerConnection>
+    <url>https://github.com/agoragames/java-leaderboard</url>
+    <connection>scm:git:git://github.com/agoragames/java-leaderboard.git</connection>
+    <developerConnection>scm:git:git@github.com:agoragames/java-leaderboard.git</developerConnection>
   </scm>
 
   <dependencies>
@@ -58,6 +58,6 @@
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
       <version>2.0.0</version>
-	  </dependency>
+    </dependency>
   </dependencies>
 </project>
