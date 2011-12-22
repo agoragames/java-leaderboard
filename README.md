@@ -13,7 +13,7 @@ You should be able to use the following as a dependency in your Maven pom.xml:
     <dependency>
       <groupId>com.agoragames</groupId>
       <artifactId>leaderboard</artifactId>
-      <version>2.0.0</version>
+      <version>2.0.1</version>
     </dependency>
 	
 Make sure your redis server is running! Redis configuration is outside the scope of this README, but 
