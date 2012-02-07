@@ -1,15 +1,10 @@
 package com.agoragames.leaderboard;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.Transaction;
-import redis.clients.jedis.TransactionBlock;
 
 public class Leaderboard {
 	
@@ -17,8 +12,9 @@ public class Leaderboard {
 	public static final int DEFAULT_PAGE_SIZE = 25;
 	public static final String DEFAULT_REDIS_HOST = "localhost";
 	public static final int DEFAULT_REDIS_PORT = 6379;
+    public static final List<LeaderData> EMPTY_LEADER_DATA = Collections.emptyList();
 
-	private Jedis _jedis;
+    private Jedis _jedis;
 	private String _leaderboardName;
 	private int _pageSize;
 	
@@ -209,21 +205,23 @@ public class Leaderboard {
 	/**
 	 * Retrieve the score for a member in the current leaderboard
 	 * 
-	 * @param member Member 
-	 * @return Member score
+	 *
+     * @param member Member
+     * @return Member score
 	 */
-	public double scoreFor(String member) {
+	public Double scoreFor(String member) {
 		return scoreForIn(_leaderboardName, member);
 	}
 	
 	/**
 	 * Retrieve the score for a member in the named leaderboard
 	 * 
-	 * @param leaderboardName Leaderboard
-	 * @param member Member
-	 * @return Member score
+	 *
+     * @param leaderboardName Leaderboard
+     * @param member Member
+     * @return Member score
 	 */
-	public double scoreForIn(String leaderboardName, String member) {
+	public Double scoreForIn(String leaderboardName, String member) {
 		return _jedis.zscore(leaderboardName, member);
 	}
 	
@@ -274,28 +272,39 @@ public class Leaderboard {
 	/**
 	 * Retrieve the rank for a member in the current leaderboard
 	 * 
-	 * @param member Member
-	 * @param useZeroIndexForRank Use zero-based index for rank
-	 * @return Rank for member in the current leaderboard
+	 *
+     * @param member Member
+     * @param useZeroIndexForRank Use zero-based index for rank
+     * @return Rank for member in the current leaderboard
 	 */
-	public long rankFor(String member, boolean useZeroIndexForRank) {
+	public Long rankFor(String member, boolean useZeroIndexForRank) {
 		return rankForIn(_leaderboardName, member, useZeroIndexForRank);
 	}
 	
 	/**
 	 * Retrieve the rank for a member in the named leaderboard
 	 * 
-	 * @param leaderboardName Leaderboard
-	 * @param member Member
-	 * @param useZeroIndexForRank Use zero-based index for rank
-	 * @return Rank for member in the named leaderboard
+	 *
+     * @param leaderboardName Leaderboard
+     * @param member Member
+     * @param useZeroIndexForRank Use zero-based index for rank
+     * @return Rank for member in the named leaderboard
 	 */
-	public long rankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
-		if (useZeroIndexForRank) {
-			return _jedis.zrevrank(leaderboardName, member);
-		} else {
-			return (_jedis.zrevrank(leaderboardName, member) + 1);
-		}		
+	public Long rankForIn(String leaderboardName, String member, boolean useZeroIndexForRank) {
+        
+        Long result = null;
+        
+        Long redisRank = _jedis.zrevrank(leaderboardName, member);
+
+        if (redisRank != null) {
+            if (useZeroIndexForRank) {
+    			result = redisRank;
+	    	} else {
+		    	result = (redisRank + 1);
+		    }
+        }
+
+        return result;
 	}
 	
 	/**
@@ -424,13 +433,18 @@ public class Leaderboard {
 	 * @return Leaders around a given member in the named leaderboard as a list of LeaderData
 	 */
 	public List<LeaderData> aroundMeIn(String leaderboardName, String member, boolean useZeroIndexForRank, int pageSize) {
-		long reverseRankForMember = _jedis.zrevrank(leaderboardName, member);
+		Long reverseRankForMember = _jedis.zrevrank(leaderboardName, member);
+        
+        if (reverseRankForMember == null) {
+            return EMPTY_LEADER_DATA;
+        }
+        
 		
 		if (pageSize < 1) {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		int startingOffset = (int) reverseRankForMember - (pageSize / 2);
+		int startingOffset = reverseRankForMember.intValue() - (pageSize / 2);
 		if (startingOffset < 0) {
 			startingOffset = 0;
 		}
@@ -465,8 +479,14 @@ public class Leaderboard {
 		Iterator<String> membersIterator = members.iterator();
 		while (membersIterator.hasNext()) {
 			String member = membersIterator.next();
-			LeaderData memberData = new LeaderData(member, scoreForIn(leaderboardName, member), rankForIn(leaderboardName, member, useZeroIndexForRank));
-			leaderData.add(memberData);
+            Double score = scoreForIn(leaderboardName, member);
+            
+            if (score != null) {
+            
+                long rank = rankForIn(leaderboardName, member, useZeroIndexForRank);
+                LeaderData memberData = new LeaderData(member, score, rank);
+		    	leaderData.add(memberData);
+            }
 		}
 		
 		return leaderData;
