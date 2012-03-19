@@ -8,13 +8,13 @@ import redis.clients.jedis.Transaction;
 
 public class Leaderboard {
 	
-	public static final String VERSION = "2.0.0";
+	public static final String VERSION = "2.0.2";
 	public static final int DEFAULT_PAGE_SIZE = 25;
 	public static final String DEFAULT_REDIS_HOST = "localhost";
 	public static final int DEFAULT_REDIS_PORT = 6379;
-    public static final List<LeaderData> EMPTY_LEADER_DATA = Collections.emptyList();
+  	public static final List<LeaderData> EMPTY_LEADER_DATA = Collections.emptyList();
 
-    private Jedis _jedis;
+  	private Jedis _jedis;
 	private String _leaderboardName;
 	private int _pageSize;
 	
