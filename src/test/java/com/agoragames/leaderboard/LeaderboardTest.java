@@ -88,6 +88,19 @@ public class LeaderboardTest extends TestCase {
 		_leaderboard.changeScoreFor("member", -5);
 		assertEquals((double) 5, _leaderboard.scoreFor("member"));
 	}
+	
+	public void testchangeScoreForMemberIn() {
+		String leaderboardName = "localLeaderboardName";
+		
+		_leaderboard.rankMemberIn(leaderboardName, "member", 5);
+		assertEquals((double) 5,  _leaderboard.scoreForIn(leaderboardName, "member"));
+
+		_leaderboard.changeScoreForMemberIn(leaderboardName, "member", 5);
+		assertEquals((double) 10, _leaderboard.scoreForIn(leaderboardName, "member"));
+
+		_leaderboard.changeScoreForMemberIn(leaderboardName, "member", -5);
+		assertEquals((double) 5, _leaderboard.scoreForIn(leaderboardName, "member"));
+	}
 
 	public void testCheckMember() {
 		rankMembersInLeaderboard(5);

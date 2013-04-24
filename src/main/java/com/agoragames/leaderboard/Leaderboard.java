@@ -234,7 +234,7 @@ public class Leaderboard {
 	 */
 	public double changeScoreFor(String member, double delta) {
 		return changeScoreForMemberIn(_leaderboardName, member, delta);
-	}
+}	
 	
 	/**
 	 * Change the score for a member by a certain delta in the named leaderboard
@@ -245,7 +245,7 @@ public class Leaderboard {
 	 * @return Updated score
 	 */
 	public double changeScoreForMemberIn(String leaderboardName, String member, double delta) {
-		return _jedis.zincrby(_leaderboardName, delta, member); 
+		return _jedis.zincrby(leaderboardName, delta, member); 
 	}
 	
 	/**
