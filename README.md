@@ -3,7 +3,7 @@ java-leaderboard
 
 Leaderboards backed by Redis in Java, http://redis.io.
 
-Builds off ideas proposed in http://blog.agoragames.com/2011/01/01/creating-high-score-tables-leaderboards-using-redis/.
+Builds off ideas proposed in https://web.archive.org/web/20110105112327/http://blog.agoragames.com/2011/01/01/creating-high-score-tables-leaderboards-using-redis/.
 
 Installation
 ============
